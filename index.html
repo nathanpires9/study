@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Technique</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1E1E1E;
+            color: #FFFFFF;
+            transition: background-color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #2C2C2C;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2196F3;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #2196F3;
+        }
+
+        section {
+            padding: 100px 20px;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding-top: 150px;
+        }
+
+        .timer-section {
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 96px;
+            font-weight: 700;
+            color: #2196F3;
+            margin: 40px 0;
+        }
+
+        .btn {
+            font-size: 18px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1976D2;
+        }
+
+        .full-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .mode-indicator {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2196F3;
+        }
+
+        .content-section {
+            background-color: #2C2C2C;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2196F3;
+        }
+
+        .content-section p {
+            font-size: 18px;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+
+        .content-section ul, .content-section ol {
+            padding-left: 20px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" id="logo">Pomodoro Technique</div>
+        <div class="nav-links">
+            <a href="#how-it-works">How It Works</a>
+            <a href="#benefits">Benefits</a>
+            <a href="#timer">Timer</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>Master Your Time</h1>
+        <p>Enhance your productivity with the Pomodoro Technique.</p>
+        <button class="btn" id="start-btn">Start Timer</button>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="content-section">
+        <h2>How It Works</h2>
+        <p>The Pomodoro Technique is a time management method developed by Francesco Cirillo in the late 1980s. It involves working in intervals, typically 25 minutes, separated by short breaks.</p>
+        <ol>
+            <li>Choose a task to be accomplished.</li>
+            <li>Set a timer for 25 minutes.</li>
+            <li>Work on the task until the timer rings.</li>
+            <li>Take a short break (5 minutes).</li>
+            <li>After four cycles, take a longer break (15-30 minutes).</li>
+        </ol>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="content-section">
+        <h2>Benefits</h2>
+        <ul>
+            <li>Improved Focus: Short intervals enhance concentration.</li>
+            <li>Increased Productivity: Regular breaks prevent burnout.</li>
+            <li>Effective Time Management: Structured sessions make tasks more manageable.</li>
+        </ul>
+    </section>
+
+    <!-- Timer Section -->
+    <section id="timer" class="timer-section">
+        <div class="content-section">
+            <h2>Pomodoro Timer</h2>
+            <div class="timer" id="timer-display">25:00</div>
+            <button class="btn" id="start-timer">Start Timer</button>
+            <button class="btn" id="pause-btn">Pause</button>
+            <button class="btn" id="skip-btn">Skip</button>
+        </div>
+    </section>
+
+    <!-- Full-screen Timer -->
+    <div class="full-screen hidden" id="fullscreen-timer">
+        <div class="mode-indicator" id="mode-display">Focus Time 🎯</div>
+        <div class="timer" id="fullscreen-timer-display">25:00</div>
+        <button class="btn" id="fullscreen-pause-btn">Pause</button>
+        <button class="btn" id="fullscreen-skip-btn">Skip</button>
+    </div>
+    
+    <!-- Modern alert sound -->
+    <audio id="alert-sound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- JavaScript -->
+    <script>
+        let timer;
+        let isRunning = false;
+        let isStudy = true;
+        let timeLeft = 25 * 60;
+
+        const elements = {
+            startBtn: document.getElementById('start-btn'),
+            pauseBtn: document.getElementById('pause-btn'),
+            skipBtn: document.getElementById('skip-btn'),
+            timerDisplay: document.getElementById('timer-display'),
+            fullscreenTimerDisplay: document.getElementById('fullscreen-timer-display'),
+            modeDisplay: document.getElementById('mode-display'),
+            fullscreen: document.getElementById('fullscreen-timer'),
+            logo: document.getElementById('logo'),
+            alertSound: document.getElementById('alert-sound'),
+            fullscreenPauseBtn: document.getElementById('fullscreen-pause-btn'),
+            fullscreenSkipBtn: document.getElementById('fullscreen-skip-btn')
+        };
+
+        // Timer functions
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                elements.fullscreen.classList.remove('hidden');
+                elements.startBtn.disabled = true;
+                elements.pauseBtn.textContent = 'Pause';
+                elements.fullscreenPauseBtn.textContent = 'Pause';
+                timer = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timer);
+                elements.pauseBtn.textContent = 'Resume';
+                elements.fullscreenPauseBtn.textContent = 'Resume';
+            } else {
+                startTimer();
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            isRunning = false;
+            timeLeft = isStudy ? 25 * 60 : 5 * 60;
+            updateDisplay();
+        }
+
+        function skipTimer() {
+            playAlert();
+            isStudy = !isStudy;
+            timeLeft = isStudy ? 25 * 60 : 5 * 60;
+            updateModeDisplay();
+            resetTimer();
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateDisplay();
+            } else {
+                playAlert();
+                skipTimer();
+            }
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            elements.timerDisplay.textContent = timeString;
+            elements.fullscreenTimerDisplay.textContent = timeString;
+        }
+
+        function updateModeDisplay() {
+            const modeText = isStudy ? 'Focus Time 🎯' : 'Break Time ☕️';
+            elements.modeDisplay.textContent = modeText;
+            document.body.style.backgroundColor = isStudy ? '#1E1E1E' : '#0A2E46';
+        }
+
+        function playAlert() {
+            let count = 0;
+            const playSound = () => {
+                if (count < 3) {
+                    elements.alertSound.currentTime = 0;
+                    elements.alertSound.play();
+                    count++;
+                    elements.alertSound.onended = playSound;
+                }
+            };
+            playSound();
+        }
+
+        // Event Listeners
+        elements.startBtn.addEventListener('click', startTimer);
+        elements.pauseBtn.addEventListener('click', pauseTimer);
+        elements.skipBtn.addEventListener('click', skipTimer);
+        elements.fullscreenPauseBtn.addEventListener('click', pauseTimer);
+        elements.fullscreenSkipBtn.addEventListener('click', skipTimer);
+        
+        elements.logo.addEventListener('click', () => {
+            clearInterval(timer);
+            elements.fullscreen.classList.add('hidden');
+            isStudy = true;
+            timeLeft = 25 * 60;
+            elements.startBtn.disabled = false;
+            updateModeDisplay();
+            updateDisplay();
+            document.body.style.backgroundColor = '#1E1E1E';
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Initialize
+        updateModeDisplay();
+    </script>
+</body>
+</html>

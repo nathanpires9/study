@@ -41,14 +41,14 @@ A modern, responsive, and interactive Pomodoro Technique webpage designed to hel
 5. **Full-Screen Mode**: The timer automatically transitions to full-screen mode for distraction-free focus.
 
 ## Live Demo
-Check out the live demo here: [Live Demo](#) *(Replace with your actual link)*
+Check out the live demo here: [Live Demo](https://nathanpires9.github.io/study/) 
 
 ## Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/pomodoro-technique.git
+git clone https://github.com/nathanpires9/study
 ```
 
 Open `index.html` in your browser.

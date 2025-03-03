@@ -16,11 +16,15 @@
             color: #FFFFFF;
             transition: background-color 0.3s ease;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* Navigation Bar */
         .navbar {
             background-color: #2C2C2C;
-            padding: 20px 40px;
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -28,6 +32,7 @@
             top: 0;
             width: 100%;
             z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .logo {
@@ -41,31 +46,80 @@
         .nav-links {
             display: flex;
             gap: 20px;
+            align-items: center;
         }
 
         .nav-links a {
             color: #FFFFFF;
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
             color: #2196F3;
         }
 
-        section {
-            padding: 100px 20px;
-            margin: 0 auto;
-            max-width: 800px;
-        }
-
+        /* Hero Section */
         .hero-section {
             text-align: center;
-            padding-top: 150px;
+            padding: 150px 20px 60px;
+            margin: 0 auto;
+            max-width: 800px;
+            width: 90%;
         }
 
+        .hero-section h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background-color: #2C2C2C;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2196F3;
+        }
+
+        .content-section p {
+            font-size: 18px;
+            color: #FFFFFF;
+            line-height: 1.6;
+        }
+
+        .content-section ul, .content-section ol {
+            padding-left: 20px;
+        }
+
+        .content-section li {
+            margin-bottom: 10px;
+        }
+
+        /* Timer Section */
         .timer-section {
             text-align: center;
+            padding: 40px 20px;
+            margin: 0 auto;
+            max-width: 800px;
+            width: 90%;
         }
 
         .timer {
@@ -91,6 +145,7 @@
             background: #1976D2;
         }
 
+        /* Full-screen Timer */
         .full-screen {
             position: fixed;
             top: 0;
@@ -113,35 +168,6 @@
             font-size: 24px;
             margin-bottom: 20px;
             color: #2196F3;
-        }
-
-        .content-section {
-            background-color: #2C2C2C;
-            padding: 40px;
-            border-radius: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .content-section h2 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #2196F3;
-        }
-
-        .content-section p {
-            font-size: 18px;
-            color: #FFFFFF;
-            line-height: 1.6;
-        }
-
-        .content-section ul, .content-section ol {
-            padding-left: 20px;
-        }
-
-        .content-section li {
-            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -219,6 +245,7 @@
 
         const elements = {
             startBtn: document.getElementById('start-btn'),
+            startTimerBottom: document.getElementById('start-timer'), // Added bottom start button
             pauseBtn: document.getElementById('pause-btn'),
             skipBtn: document.getElementById('skip-btn'),
             timerDisplay: document.getElementById('timer-display'),
@@ -236,7 +263,6 @@
             if (!isRunning) {
                 isRunning = true;
                 elements.fullscreen.classList.remove('hidden');
-                elements.startBtn.disabled = true;
                 elements.pauseBtn.textContent = 'Pause';
                 elements.fullscreenPauseBtn.textContent = 'Pause';
                 timer = setInterval(updateTimer, 1000);
@@ -308,6 +334,7 @@
 
         // Event Listeners
         elements.startBtn.addEventListener('click', startTimer);
+        elements.startTimerBottom.addEventListener('click', startTimer); // Added listener for bottom start button
         elements.pauseBtn.addEventListener('click', pauseTimer);
         elements.skipBtn.addEventListener('click', skipTimer);
         elements.fullscreenPauseBtn.addEventListener('click', pauseTimer);
@@ -315,13 +342,22 @@
         
         elements.logo.addEventListener('click', () => {
             clearInterval(timer);
+            isRunning = false; // Reset isRunning to false
             elements.fullscreen.classList.add('hidden');
             isStudy = true;
             timeLeft = 25 * 60;
-            elements.startBtn.disabled = false;
             updateModeDisplay();
             updateDisplay();
             document.body.style.backgroundColor = '#1E1E1E';
+        });
+
+        // Click outside the full-screen timer to hide it
+        elements.fullscreen.addEventListener('click', (e) => {
+            // Check if the click is outside the timer container
+            if (e.target === elements.fullscreen) {
+                elements.fullscreen.classList.add('hidden');
+                isRunning = false; // Reset isRunning to false
+            }
         });
 
         // Smooth scrolling for navigation links
